@@ -1,14 +1,16 @@
+{{- if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: todoapp
+  name: {{ include "todoapp.fullname" . }}
   labels:
-    release: kube-prometheus-stack
+    {{- include "todoapp.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: todoapp
+      {{- include "todoapp.selectorLabels" . | nindent 6 }}
   endpoints:
-  - port: http
-    path: /metrics/
-    interval: 10s
+    - port: http
+      interval: {{ .Values.serviceMonitor.interval | default "30s" }}
+      path: {{ .Values.serviceMonitor.path | default "/metrics" }}
+{{- end }}
