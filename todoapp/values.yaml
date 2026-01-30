@@ -22,5 +22,7 @@ autoscaling:
 
 serviceMonitor:
   enabled: false
-  interval: 30s
+  interval: 10s
   path: /metrics
+  port: http
+  labels: {}
